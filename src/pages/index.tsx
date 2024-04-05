@@ -1,13 +1,20 @@
+import Button from "@/components/Button";
 import Navigation from "@/components/Navigation";
 import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
+import { InvertoryInterface, getAllInventorys } from "@/services/Inventory";
 import PageContainer from "@/templates/PageContainer";
 import Head from "next/head";
-
-
-
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 export default function Home() {
+  const [inventorys, setInventorys] = useState<InvertoryInterface[]>([]);
+
+  useEffect(() => {
+    getAllInventorys().then((res) => setInventorys(res.data));
+  }, []);
+
   return (
     <>
       <Head>
@@ -18,11 +25,31 @@ export default function Home() {
       </Head>
 
       <PageContainer>
-        <TitlePage>Estoque</TitlePage>
-        <Table/>
+        <Row>
+          <TitlePage>Estoque</TitlePage>
+          <Button>Novo produto</Button>
+        </Row>
+
+        <Table header={["ID","Nome", "Quantidade", "Preço"]}>
+          {inventorys.map((item) => (
+            <tr className="c-table__row" key={item.id}>
+              <td className="c-table__row__data">{item.id}</td>
+              <td className="c-table__row__data">{item.name}</td>
+              <td className="c-table__row__data">{item.quantity}</td>
+              <td className="c-table__row__data">{item.price}</td>
+            </tr>
+          ))}
+        </Table>
       </PageContainer>
     </>
   );
 }
 
+const Row = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`;
 

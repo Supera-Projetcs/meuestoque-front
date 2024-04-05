@@ -1,36 +1,23 @@
+import { ReactNode } from "react";
 import styled from "styled-components";
 
-export default function Table() {
+interface Props {
+  header: string[];
+  children: ReactNode;
+}
+
+export default function Table({ header, children }: Props) {
   return (
     <TableContainer>
       <thead className="c-table__header">
         <tr className="c-table__row">
-          <th className="c-table__row__data">Coluna 1</th>
-          <th className="c-table__row__data">Coluna 2</th>
-          <th className="c-table__row__data">Coluna 3</th>
+          {header.map((item, index) => (
+            <th className="c-table__row__data" key={index}>{item}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        <tr className="c-table__row">
-          <td className="c-table__row__data">Dado 1</td>
-          <td className="c-table__row__data">Dado 2</td>
-          <td className="c-table__row__data">Dado 3</td>
-        </tr>
-        <tr className="c-table__row">
-          <td className="c-table__row__data">Dado 4</td>
-          <td className="c-table__row__data">Dado 5</td>
-          <td className="c-table__row__data">Dado 6</td>
-        </tr>
-        <tr className="c-table__row">
-          <td className="c-table__row__data">Dado 4</td>
-          <td className="c-table__row__data">Dado 5</td>
-          <td className="c-table__row__data">Dado 6</td>
-        </tr>
-        <tr className="c-table__row">
-          <td className="c-table__row__data">Dado 4</td>
-          <td className="c-table__row__data">Dado 5</td>
-          <td className="c-table__row__data">Dado 6</td>
-        </tr>
+        {children}
       </tbody>
     </TableContainer>
   );
@@ -43,11 +30,18 @@ const TableContainer = styled.table`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
 
   .c-table__header {
     background: #4b4fae;
     color: #fff;
     font-weight: 700;
+
+    .c-table__row__data + .c-table__row__data  {
+      border-left: 1px solid #fff;
+    }
   }
 
   .c-table__row {
@@ -55,7 +49,7 @@ const TableContainer = styled.table`
 
     .c-table__row__data {
       vertical-align: middle;
-      align-items: center;
+      text-align: left;
       padding: 0px 24px;
     }
 

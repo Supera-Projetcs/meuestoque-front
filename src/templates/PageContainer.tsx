@@ -26,5 +26,6 @@ const Container = styled.div`
     min-height: 100vh;
     flex: 1;
     padding:  60px 80px;
+    background: #f5f5f5;
   }
 `;

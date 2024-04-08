@@ -1,19 +1,26 @@
 import Button from "@/components/Button";
+import ModalCreateInventory from "@/components/ModalCreateInventory";
+import ModalTemplate, { ModalTemplateHandles } from "@/components/ModalTemplate";
 import Navigation from "@/components/Navigation";
 import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
 import { InvertoryInterface, getAllInventorys } from "@/services/Inventory";
 import PageContainer from "@/templates/PageContainer";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 export default function Home() {
   const [inventorys, setInventorys] = useState<InvertoryInterface[]>([]);
+  const modalRef = useRef<ModalTemplateHandles>(null)
 
   useEffect(() => {
     getAllInventorys().then((res) => setInventorys(res.data));
   }, []);
+
+  function addInventory(data: InvertoryInterface){
+    setInventorys([data,...inventorys])
+  }
 
   return (
     <>
@@ -25,9 +32,11 @@ export default function Home() {
       </Head>
 
       <PageContainer>
+
+        <ModalCreateInventory ref={modalRef} setInventory={addInventory}/>
         <Row>
           <TitlePage>Estoque</TitlePage>
-          <Button>Novo produto</Button>
+          <Button onClick={()=> modalRef.current?.openModal()}>Novo produto</Button>
         </Row>
 
         <Table header={["ID","Nome", "Quantidade", "Preço"]}>

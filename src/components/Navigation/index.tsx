@@ -51,8 +51,10 @@ const Nav = styled.nav`
   max-width: 320px;
   flex: 1;
   background: #26328b;
-  min-height: 100vh;
-  height: 100%;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+
 
   .nav__title {
     display: flex;

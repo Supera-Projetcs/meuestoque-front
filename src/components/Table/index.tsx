@@ -59,6 +59,11 @@ const TableContainer = styled.table`
   }
 
   tbody {
+
+    .c-table__row__data:last-child{
+      max-width: max-content;
+      width: max-content;
+    }
     .c-table__row__data:nth-child(even) {
       background-color: #fafafa;
     }

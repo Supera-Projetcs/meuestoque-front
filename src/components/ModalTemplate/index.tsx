@@ -20,6 +20,9 @@ export interface ModalTemplateHandles {
 export default forwardRef(function ModalTemplate({ children }: Props, ref) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const closeModal = ()=> setIsOpen(false)
+
+
   useImperativeHandle(ref, () => ({
     toggleModal: () => {
       setIsOpen(!isOpen);
@@ -27,9 +30,7 @@ export default forwardRef(function ModalTemplate({ children }: Props, ref) {
     openModal: () => {
       setIsOpen(true);
     },
-    closeModal: () => {
-      setIsOpen(false);
-    },
+    closeModal
   }));
 
   if (!isOpen) return <></>;
@@ -37,7 +38,7 @@ export default forwardRef(function ModalTemplate({ children }: Props, ref) {
   return (
     <Container>
       <section className="c-modal__main">{children}</section>
-      <div className="c-modal__background" />
+      <div className="c-modal__background" onClick={closeModal}/>
     </Container>
   );
 });

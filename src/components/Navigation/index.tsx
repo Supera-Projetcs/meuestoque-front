@@ -20,6 +20,15 @@ export default function Navigation() {
             router.pathname === "/" ? "nav__link--selected" : ""
           }`}
         >
+          Início
+        </a>
+      </Link>
+      <Link href={"/estoque"} legacyBehavior>
+        <a
+          className={`nav__link ${
+            router.pathname === "/estoque" ? "nav__link--selected" : ""
+          }`}
+        >
           Estoque
         </a>
       </Link>

@@ -1,25 +1,60 @@
 import Button from "@/components/Button";
 import ModalCreateInventory from "@/components/ModalCreateInventory";
-import ModalTemplate, { ModalTemplateHandles } from "@/components/ModalTemplate";
+import ModalDeleteInventory from "@/components/ModalDeleteInventory";
+import { ModalTemplateHandles } from "@/components/ModalTemplate";
 import Navigation from "@/components/Navigation";
 import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
 import { InvertoryInterface, getAllInventorys } from "@/services/Inventory";
 import PageContainer from "@/templates/PageContainer";
 import Head from "next/head";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import EditImg from "/public/assets/icons/edit.svg";
+import TrashImg from "/public/assets/icons/trash.svg";
 
 export default function Home() {
   const [inventorys, setInventorys] = useState<InvertoryInterface[]>([]);
-  const modalRef = useRef<ModalTemplateHandles>(null)
+  const [editInventory, setEditInventory] = useState<
+    InvertoryInterface | undefined
+  >(undefined);
+  const [idDeleteInvetory, setIdDeleteInventoy] = useState(-1);
+
+  const modalCreateRef = useRef<ModalTemplateHandles>(null);
+  const modalDeleteRef = useRef<ModalTemplateHandles>(null);
 
   useEffect(() => {
     getAllInventorys().then((res) => setInventorys(res.data));
   }, []);
 
-  function addInventory(data: InvertoryInterface){
-    setInventorys([data,...inventorys])
+  function addInventory(data: InvertoryInterface) {
+    const index = inventorys.findIndex((item) => item.id == data.id);
+    console.log(index);
+    if (index != -1) {
+      console.log("oi");
+      let new_array = [...inventorys];
+      new_array[index] = data;
+      setInventorys(new_array);
+    } else {
+      console.log("nada");
+      setInventorys([data, ...inventorys]);
+    }
+  }
+
+  function openEditModal(item: InvertoryInterface) {
+    setEditInventory(item);
+    modalCreateRef.current?.openModal();
+  }
+
+  function openDeleteModal(item: InvertoryInterface) {
+    setIdDeleteInventoy(item.id);
+    modalDeleteRef.current?.openModal();
+  }
+
+  function deleteModal(){
+    const new_array = inventorys.filter((item)=> item.id != idDeleteInvetory)
+    setInventorys(new_array)
   }
 
   return (
@@ -32,20 +67,50 @@ export default function Home() {
       </Head>
 
       <PageContainer>
-
-        <ModalCreateInventory ref={modalRef} setInventory={addInventory}/>
+        <ModalDeleteInventory
+          ref={modalDeleteRef}
+          idDelete={idDeleteInvetory}
+          onDelete={deleteModal}
+        />
+        <ModalCreateInventory
+          ref={modalCreateRef}
+          setInventory={addInventory}
+          editInventoryData={editInventory}
+        />
         <Row>
           <TitlePage>Estoque</TitlePage>
-          <Button onClick={()=> modalRef.current?.openModal()}>Novo produto</Button>
+          <Button
+            onClick={() => {
+              setEditInventory(undefined);
+              modalCreateRef.current?.openModal();
+            }}
+          >
+            Novo produto
+          </Button>
         </Row>
 
-        <Table header={["ID","Nome", "Quantidade", "Preço"]}>
+        <Table header={["ID", "Nome", "Quantidade", "Preço", ""]}>
           {inventorys.map((item) => (
             <tr className="c-table__row" key={item.id}>
               <td className="c-table__row__data">{item.id}</td>
               <td className="c-table__row__data">{item.name}</td>
               <td className="c-table__row__data">{item.quantity}</td>
               <td className="c-table__row__data">{item.price}</td>
+              <td className="c-table__row__data" style={{ width: " 5%" }}>
+                <RowButtons>
+                  <Button onClick={() => openEditModal(item)}>
+                    <Image src={EditImg} alt="Editar" width={20} height={20} />
+                  </Button>
+                  <Button color="red" onClick={()=>openDeleteModal(item)}>
+                    <Image
+                      src={TrashImg}
+                      alt="Excluir"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                </RowButtons>
+              </td>
             </tr>
           ))}
         </Table>
@@ -62,3 +127,8 @@ const Row = styled.div`
   margin-bottom: 32px;
 `;
 
+const RowButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;

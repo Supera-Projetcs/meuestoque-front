@@ -3,9 +3,12 @@ import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
 import PageContainer from "@/templates/PageContainer";
 import Head from "next/head";
-
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
+
+  const [replacements, setReplacements] = useState([]);
+
   return (
     <>
       <Head>
@@ -23,4 +26,28 @@ export default function Home() {
   );
 }
 
+export async function getServerSideProps({ req, res }) {
+
+  const protoLoader = require('@grpc/proto-loader');
+  const grpc = require('@grpc/grpc-js');
+  const packageDefinition = protoLoader.loadSync('/Users/developerjusinvestments/Documents/Projetos/meuestoque/meuestoque-front/src/services/grpc/replacements.proto');
+  const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
+
+  const client = new protoDescriptor.config.replacements.ReplacementController(
+    'localhost:50051', 
+    grpc.credentials.createInsecure() 
+  );
+
+  client.List({}, (error: any, response: any) => {
+    if (error) {
+        console.error('Erro ao chamar o serviço List:', error);
+    } else {
+        console.log('Resposta do serviço List:', response);
+    }
+  });
+
+  return {
+    props: {},
+  }
+}
 

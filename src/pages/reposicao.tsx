@@ -1,13 +1,55 @@
+import Button from "@/components/Button";
+import ModalCreateReplacement from "@/components/ModalCreateReplacement";
 import Navigation from "@/components/Navigation";
 import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
+import { getInventoysByIds, InvertoryInterface } from "@/services/Inventory";
+import {
+  CustomReplacement,
+  Replacement,
+  ReplacementService,
+} from "@/services/Replacement";
 import PageContainer from "@/templates/PageContainer";
 import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
+import {  useMemo, useRef, useState } from "react";
+import styled from "styled-components";
 
-export default function Home() {
+export default function Home({ results }: any) {
+  const [replacements, setReplacement] = useState<CustomReplacement[]>([]);
 
-  const [replacements, setReplacements] = useState([]);
+  useMemo(() => {
+    results && getData();
+  }, []);
+
+  function valideteProduto(type: string) {
+    return ["number", "string"].includes(typeof type);
+  }
+
+  async function getData() {
+    const ids = results
+      .map((item: Replacement, index: number) => {
+        if (item.produto && valideteProduto(item.produto)) {
+          return `${index != 0 ? "," : ""}` + item.produto;
+        } else {
+          return "";
+        }
+      })
+      .join("");
+
+    if (ids) {
+      const productsRes = await getInventoysByIds(ids);
+      const new_results = results.map((item: Replacement, index: number) => {
+        if (["number", "string"].includes(typeof item.produto)) {
+          const product = productsRes.data.find(
+            (product: any) => product.id == item.produto
+          );
+          item.produto = product;
+        }
+        return item;
+      });
+      setReplacement(new_results);
+    }
+  }
 
   return (
     <>
@@ -19,35 +61,73 @@ export default function Home() {
       </Head>
 
       <PageContainer>
+        <ModalCreateReplacement/>
         <TitlePage>Pedidos de Reposição</TitlePage>
-        {/* <Table/> */}
+        <Row>
+          <TitlePage>Estoque</TitlePage>
+          <Button
+            onClick={() => {
+              // setEditInventory(undefined);
+              // modalCreateRef.current?.openModal();
+            }}
+          >
+            Novo pedido
+          </Button>
+        </Row>
+        <Table
+          header={[
+            "ID",
+            "Fornecedor",
+            "Produto",
+            "Quantidade",
+            "Status",
+            "Data do pedido",
+          ]}
+        >
+          {replacements.map((item) => (
+            <tr className="c-table__row" key={item.id}>
+              <td className="c-table__row__data">{item.id}</td>
+              <td className="c-table__row__data">{item.fornecedor}</td>
+              <td className="c-table__row__data">{item.produto?.name}</td>
+              <td className="c-table__row__data">{item.quantidade}</td>
+              <td className="c-table__row__data">{item.status}</td>
+              <td className="c-table__row__data">{item.data_pedido}</td>
+              {/* <td className="c-table__row__data" style={{ width: " 5%" }}>
+                <RowButtons>
+                  <Button onClick={() => openEditModal(item)}>
+                    <Image src={EditImg} alt="Editar" width={20} height={20} />
+                  </Button>
+                  <Button color="red" onClick={()=>openDeleteModal(item)}>
+                    <Image
+                      src={TrashImg}
+                      alt="Excluir"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                </RowButtons>
+              </td> */}
+            </tr>
+          ))}
+        </Table>
       </PageContainer>
     </>
   );
 }
 
-export async function getServerSideProps({ req, res }) {
-
-  const protoLoader = require('@grpc/proto-loader');
-  const grpc = require('@grpc/grpc-js');
-  const packageDefinition = protoLoader.loadSync('/Users/developerjusinvestments/Documents/Projetos/meuestoque/meuestoque-front/src/services/grpc/replacements.proto');
-  const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
-
-  const client = new protoDescriptor.config.replacements.ReplacementController(
-    'localhost:50051', 
-    grpc.credentials.createInsecure() 
-  );
-
-  client.List({}, (error: any, response: any) => {
-    if (error) {
-        console.error('Erro ao chamar o serviço List:', error);
-    } else {
-        console.log('Resposta do serviço List:', response);
-    }
-  });
+export async function getServerSideProps(context: any) {
+  const service = new ReplacementService();
+  const res = await service.getReplacementList();
 
   return {
-    props: {},
-  }
+    props: res,
+  };
 }
 
+const Row = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`;

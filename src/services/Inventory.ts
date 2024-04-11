@@ -33,3 +33,7 @@ export async function deleteInventory(id: number) {
 export async function getInventoysByIds(ids:string) {
   return await baseAxios.get(`inventorys/by-ids/?ids=${ids}`);
 }
+
+export async function getInventoysById(id:string) {
+  return await baseAxios.get(`inventorys/${id}`);
+}

@@ -1,9 +1,14 @@
 import Button from "@/components/Button";
 import ModalCreateReplacement from "@/components/ModalCreateReplacement";
+import { ModalTemplateHandles } from "@/components/ModalTemplate";
 import Navigation from "@/components/Navigation";
 import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
-import { getInventoysByIds, InvertoryInterface } from "@/services/Inventory";
+import {
+  getInventoysById,
+  getInventoysByIds,
+  InvertoryInterface,
+} from "@/services/Inventory";
 import {
   CustomReplacement,
   Replacement,
@@ -11,10 +16,11 @@ import {
 } from "@/services/Replacement";
 import PageContainer from "@/templates/PageContainer";
 import Head from "next/head";
-import {  useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 export default function Home({ results }: any) {
+  const modalCreateRef = useRef<ModalTemplateHandles>(null);
   const [replacements, setReplacement] = useState<CustomReplacement[]>([]);
 
   useMemo(() => {
@@ -51,6 +57,13 @@ export default function Home({ results }: any) {
     }
   }
 
+  async function addReplacement(item: Replacement) {
+    let new_item = item;
+    const { data } = await getInventoysById(item.produto);
+    new_item.produto = data;
+    setReplacement([...replacements, new_item as any]);
+  }
+
   return (
     <>
       <Head>
@@ -61,14 +74,17 @@ export default function Home({ results }: any) {
       </Head>
 
       <PageContainer>
-        <ModalCreateReplacement/>
+        <ModalCreateReplacement
+          ref={modalCreateRef}
+          setReplacements={addReplacement}
+        />
         <TitlePage>Pedidos de Reposição</TitlePage>
         <Row>
           <TitlePage>Estoque</TitlePage>
           <Button
             onClick={() => {
               // setEditInventory(undefined);
-              // modalCreateRef.current?.openModal();
+              modalCreateRef.current?.openModal();
             }}
           >
             Novo pedido

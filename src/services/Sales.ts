@@ -20,3 +20,6 @@ export interface Sales {
 export async function getAllSales() {
     return await baseAxios.get("vendas/");
   }
+export async function getSalesStats() {
+    return await baseAxios.get("sales-stats/");
+  }

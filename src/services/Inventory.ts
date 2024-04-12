@@ -41,3 +41,8 @@ export async function getInventoysById(id:string) {
 export async function updateQuantitiesInventory(data: {id:number, quantity: number}[]) {
   return await baseAxios.put("inventorys/update-quantities/",data);
 }
+
+export async function totalInventorys() {
+  return await baseAxios.get("inventorys/count/");
+}
+

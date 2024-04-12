@@ -7,6 +7,7 @@ import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
 import { InvertoryInterface, getAllInventorys } from "@/services/Inventory";
 import PageContainer from "@/templates/PageContainer";
+import { formatPrice } from "@/utils/formatedDate";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -95,7 +96,7 @@ export default function Inventory() {
               <td className="c-table__row__data">{item.id}</td>
               <td className="c-table__row__data">{item.name}</td>
               <td className="c-table__row__data">{item.quantity}</td>
-              <td className="c-table__row__data">{item.price}</td>
+              <td className="c-table__row__data">{formatPrice(item.price)}</td>
               <td className="c-table__row__data" style={{ width: " 5%" }}>
                 <RowButtons>
                   <Button onClick={() => openEditModal(item)}>

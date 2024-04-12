@@ -27,7 +27,7 @@ export default function Home() {
       </Head>
 
       <PageContainer>
-       <Dashboard></Dashboard>
+       <Dashboard/>
       </PageContainer>
     </>
   );

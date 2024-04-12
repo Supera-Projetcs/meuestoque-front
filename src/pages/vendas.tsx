@@ -5,7 +5,7 @@ import TitlePage from "@/components/TitlePage";
 import { getInventoysByIds, InvertoryInterface } from "@/services/Inventory";
 import { getAllSales, Sales, SalesProduct } from "@/services/Sales";
 import PageContainer from "@/templates/PageContainer";
-import { formatedDate } from "@/utils/formatedDate";
+import { formatedDate, formatPrice } from "@/utils/formatedDate";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -24,7 +24,7 @@ export default function Home() {
       value += item.unit_value * item.quantity;
     });
 
-    return value;
+    return formatPrice(value);
   }
 
   return (

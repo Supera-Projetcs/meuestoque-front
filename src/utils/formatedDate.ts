@@ -7,3 +7,10 @@ export function formatedDate(date: string){
     
 }
 
+
+
+export function formatPrice(price:number) {
+   const formattedPrice = Number(price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+ 
+   return formattedPrice;
+ }

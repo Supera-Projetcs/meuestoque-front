@@ -20,6 +20,15 @@ export default function Navigation() {
             router.pathname === "/" ? "nav__link--selected" : ""
           }`}
         >
+          Início
+        </a>
+      </Link>
+      <Link href={"/estoque"} legacyBehavior>
+        <a
+          className={`nav__link ${
+            router.pathname === "/estoque" ? "nav__link--selected" : ""
+          }`}
+        >
           Estoque
         </a>
       </Link>
@@ -41,6 +50,15 @@ export default function Navigation() {
           Vendas
         </a>
       </Link>
+      <Link href={"/comprar"} legacyBehavior>
+        <a
+          className={`nav__link ${
+            router.pathname === "/comprar" ? "nav__link--selected" : ""
+          }`}
+        >
+          Comprar
+        </a>
+      </Link>
     </Nav>
   );
 }
@@ -51,8 +69,10 @@ const Nav = styled.nav`
   max-width: 320px;
   flex: 1;
   background: #26328b;
-  min-height: 100vh;
-  height: 100%;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+
 
   .nav__title {
     display: flex;

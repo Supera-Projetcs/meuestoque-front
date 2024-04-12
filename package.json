@@ -9,11 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.10.6",
     "axios": "^1.6.8",
+    "date-fns": "^3.6.0",
+    "dns": "^0.2.2",
+    "fs": "^0.0.1-security",
+    "grpc-web": "^1.5.0",
+    "http2": "^3.3.7",
+    "net": "^1.0.2",
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "tls": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

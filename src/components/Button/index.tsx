@@ -4,15 +4,22 @@ import styled from "styled-components";
 interface Props {
   children: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  color?:string
+  flex?: number
 }
 
-export default function Button({ children, onClick }: Props) {
-  return <ButtonContainer onClick={onClick}>{children}</ButtonContainer>;
+export default function Button({ children, onClick, color, flex }: Props) {
+  return <ButtonContainer color={color} onClick={onClick} flex={flex}>{children}</ButtonContainer>;
 }
 
-const ButtonContainer = styled.button`
-  background: #4b4fae;
+const ButtonContainer = styled.button<{color?: string, flex?:number}>`
+  background: ${({color})=> color? color : '#4b4fae'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: ${({flex})=> flex ? flex: 'unset'};
   color: #fff;
+  gap: 10px;
   font-family: Inter;
   font-size: 16px;
   font-style: normal;

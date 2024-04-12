@@ -50,6 +50,15 @@ export default function Navigation() {
           Vendas
         </a>
       </Link>
+      <Link href={"/comprar"} legacyBehavior>
+        <a
+          className={`nav__link ${
+            router.pathname === "/comprar" ? "nav__link--selected" : ""
+          }`}
+        >
+          Comprar
+        </a>
+      </Link>
     </Nav>
   );
 }

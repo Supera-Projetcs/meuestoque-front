@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package config.replacements;
+
+import "google/protobuf/empty.proto";
+
+service DashController {
+    rpc most_replaced(google.protobuf.Empty) returns (Dashmost_replacedResponse) {}
+}
+
+service ReplacementController {
+    rpc Create(ReplacementRequest) returns (ReplacementResponse) {}
+    rpc Destroy(ReplacementDestroyRequest) returns (google.protobuf.Empty) {}
+    rpc List(ReplacementListRequest) returns (ReplacementListResponse) {}
+    rpc PartialUpdate(ReplacementPartialUpdateRequest) returns (ReplacementResponse) {}
+    rpc Retrieve(ReplacementRetrieveRequest) returns (ReplacementResponse) {}
+    rpc Update(ReplacementRequest) returns (ReplacementResponse) {}
+}
+
+message Dashmost_replacedResponse {
+    int32 produto = 1;
+    int32 quantidade = 2;
+}
+
+message ReplacementDestroyRequest {
+    int32 id = 1;
+}
+
+message ReplacementListRequest {
+}
+
+message ReplacementListResponse {
+    repeated ReplacementResponse results = 1;
+    int32 count = 2;
+}
+
+message ReplacementPartialUpdateRequest {
+    int32 id = 1;
+    repeated string _partial_update_fields = 2;
+    int32 produto = 3;
+    int32 quantidade = 4;
+    string fornecedor = 5;
+    string status = 6;
+}
+
+message ReplacementRequest {
+    int32 id = 1;
+    int32 produto = 2;
+    int32 quantidade = 3;
+    string fornecedor = 4;
+    string status = 5;
+}
+
+message ReplacementResponse {
+    int32 id = 1;
+    int32 produto = 2;
+    int32 quantidade = 3;
+    string fornecedor = 4;
+    string data_pedido = 5;
+    string status = 6;
+}
+
+message ReplacementRetrieveRequest {
+    int32 id = 1;
+}
+

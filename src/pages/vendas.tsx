@@ -1,11 +1,27 @@
 import Navigation from "@/components/Navigation";
 import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
+import { InvertoryInterface } from "@/services/Inventory";
+import { getAllSales, Sales } from "@/services/Sales";
 import PageContainer from "@/templates/PageContainer";
 import Head from "next/head";
-
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [sales, setSales] = useState<Sales[]>([]);
+
+  useEffect(() => {
+    getAllSales().then((res) => setSales(res.data));
+  }, []);
+
+  function formatProduct(lista : InvertoryInterface[]){
+    const ids = lista.map((item)=> item.id).join(",")
+    console.log(ids)
+  
+    const listaFormatada = lista.map(item => <>{`${item.id} - ${item.name}`}<br/></>)
+    return listaFormatada.map((item)=> item)
+  }
+
   return (
     <>
       <Head>
@@ -17,10 +33,16 @@ export default function Home() {
 
       <PageContainer>
         <TitlePage>Vendas</TitlePage>
-        {/* <Table/> */}
+        <Table header={["ID", "Produtos", "Data"]}>
+          {sales.map((item) => (
+            <tr className="c-table__row" key={item.id}>
+              <td className="c-table__row__data">{item.id}</td>
+              <td className="c-table__row__data">{formatProduct(item.produtos)}</td>
+              <td className="c-table__row__data">{item.date_sold}</td>
+            </tr>
+          ))}
+        </Table>
       </PageContainer>
     </>
   );
 }
-
-

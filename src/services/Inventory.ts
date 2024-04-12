@@ -12,7 +12,7 @@ export interface InvertoryInterface {
     quantity: number
 }
 
-const baseAxios = axios.create({ baseURL: "http://localhost:3001/" });
+const baseAxios = axios.create({ baseURL: "http://localhost:8001/" });
 
 export async function getAllInventorys() {
   return await baseAxios.get("inventorys");

@@ -13,6 +13,7 @@ import {
   ReplacementService,
 } from "@/services/Replacement";
 import PageContainer from "@/templates/PageContainer";
+import { formatedDate } from "@/utils/formatedDate";
 import Head from "next/head";
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
@@ -151,7 +152,7 @@ export default function Home({ results }: any) {
               <td className="c-table__row__data">{item.produto?.name}</td>
               <td className="c-table__row__data">{item.quantidade}</td>
               <td className="c-table__row__data">{item.status}</td>
-              <td className="c-table__row__data">{item.data_pedido}</td>
+              <td className="c-table__row__data">{formatedDate(item.data_pedido)}</td>
               <td className="c-table__row__data" style={{ width: "5%" }}>
                 {item.status == "Pendente" ? (
                   <RowButtons>

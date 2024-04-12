@@ -17,6 +17,18 @@ export interface Sales {
 }
 
 
+interface SalesModel {
+    produtos: {id_produto: number,unit_value: number, quantity:number}[]
+}
+
 export async function getAllSales() {
     return await baseAxios.get("vendas/");
+  }
+  
+export async function getSalesStats() {
+    return await baseAxios.get("sales-stats/");
+  }
+
+export async function createSale(data: SalesModel) {
+    return await baseAxios.post("vendas/", data);
   }

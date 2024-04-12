@@ -16,6 +16,11 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   oneofs: true,
 });
 
+export const DashboardControllerService = (
+  grpc.loadPackageDefinition(packageDefinition) as unknown as ProtoGrpcType
+).config.replacements.DashController;
+
+
 export const ReplacementControllerService = (
   grpc.loadPackageDefinition(packageDefinition) as unknown as ProtoGrpcType
 ).config.replacements.ReplacementController;

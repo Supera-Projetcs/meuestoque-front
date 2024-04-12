@@ -9,7 +9,8 @@ interface Props {
 export default function ProductRowTable({ list }: Props) {
   const [names, setNames] = useState([]);
   useEffect(() => {
-    const ids = list.map((item) => item.id).join(",");
+    const ids = list.map((item) => item.id_produto).join(",");
+    console.log(ids)
     getInventoysByIds(ids).then((res) => {
       const listaFormatada = res.data.map(
         (item: any) => `${item.id} - ${item.name}`

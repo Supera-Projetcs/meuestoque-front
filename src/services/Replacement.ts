@@ -1,4 +1,4 @@
-import { ReplacementControllerService } from "./GrpcConfig";
+import { DashboardControllerService, ReplacementControllerService } from "./GrpcConfig";
 import { getInventoysByIds, InvertoryInterface } from "./Inventory";
 import { promisify } from "util";
 import * as grpc from "@grpc/grpc-js";
@@ -70,6 +70,24 @@ export class ReplacementService extends ReplacementControllerService {
     const deleteRequest = promisify(this.Destroy).bind(this);
     try {
       const res = await deleteRequest(item);
+
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+}
+
+
+export class DashboardReplacementService extends DashboardControllerService{
+  constructor() {
+    super(target, grpc.credentials.createInsecure());
+  }
+
+  public async getDasboard() {
+    const getList = promisify(this.most_replaced).bind(this);
+    try {
+      const res = await getList({});
 
       return res;
     } catch (err) {

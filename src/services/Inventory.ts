@@ -30,3 +30,14 @@ export async function deleteInventory(id: number) {
   return await baseAxios.delete(`inventorys/${id}`);
 }
 
+export async function getInventoysByIds(ids:string) {
+  return await baseAxios.get(`inventorys/by-ids/?ids=${ids}`);
+}
+
+export async function getInventoysById(id:string) {
+  return await baseAxios.get(`inventorys/${id}`);
+}
+
+export async function updateQuantitiesInventory(data: {id:number, quantity: number}[]) {
+  return await baseAxios.put("inventorys/update-quantities/",data);
+}

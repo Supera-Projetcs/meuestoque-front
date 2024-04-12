@@ -65,6 +65,7 @@ export default forwardRef(function ModalCreateReplacement({setReplacements}:Prop
     try{
        const res = await createReplacement(data)
        setReplacements(res.data)
+       closeModal()
     }catch(err){
         console.log(err)
     }

@@ -25,9 +25,9 @@ export interface CustomReplacement {
   status: string;
 }
 
-export interface ReplacementModel extends ReplacementRequest {
+export type ReplacementUpdate = Omit<Replacement, "data_pedido">;
 
-}
+export interface ReplacementModel extends ReplacementRequest {}
 
 export class ReplacementService extends ReplacementControllerService {
   constructor() {
@@ -45,7 +45,7 @@ export class ReplacementService extends ReplacementControllerService {
     }
   }
 
-  public async CreateReplacement(item:ReplacementModel){
+  public async CreateReplacement(item: ReplacementModel) {
     const create = promisify(this.Create).bind(this);
     try {
       const res = await create(item);
@@ -55,6 +55,25 @@ export class ReplacementService extends ReplacementControllerService {
       return err;
     }
   }
+
+  public async updateReplacement(item: ReplacementRequest) {
+    const update = promisify(this.Update).bind(this);
+    try {
+      const res = await update(item);
+
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
+  public async deleteReplacement(item: { id: number }) {
+    const deleteRequest = promisify(this.Destroy).bind(this);
+    try {
+      const res = await deleteRequest(item);
+
+      return res;
+    } catch (err) {
+      return err;
+    }
+  }
 }
-
-

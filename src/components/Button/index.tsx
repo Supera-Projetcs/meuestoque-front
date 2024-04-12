@@ -19,6 +19,7 @@ const ButtonContainer = styled.button<{color?: string, flex?:number}>`
   justify-content: center;
   flex: ${({flex})=> flex ? flex: 'unset'};
   color: #fff;
+  gap: 10px;
   font-family: Inter;
   font-size: 16px;
   font-style: normal;

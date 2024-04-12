@@ -1,5 +1,5 @@
 import { updateReplacement } from "@/services/HttpReplacement";
-import { deleteInventory } from "@/services/Inventory";
+import { deleteInventory, updateQuantitiesInventory } from "@/services/Inventory";
 import {
   CustomReplacement,
   Replacement,
@@ -44,7 +44,15 @@ export default forwardRef(function ModalProcessedReplacement(
         fornecedor: itemProcessed.fornecedor,
         status: "Processado",
       };
+
+      const attProduct = [{
+        id: itemProcessed.produto
+        ? itemProcessed.produto.id
+        : 0,
+        quantity: itemProcessed.quantidade
+      }]
       const res = await updateReplacement(new_item);
+      await updateQuantitiesInventory(attProduct)
       onProcesse(res.data);
       closeModal();
     } catch (err) {

@@ -1,11 +1,14 @@
 import Navigation from "@/components/Navigation";
+import ProductRowTable from "@/components/ProductRowTable";
 import Table from "@/components/Table";
 import TitlePage from "@/components/TitlePage";
-import { InvertoryInterface } from "@/services/Inventory";
-import { getAllSales, Sales } from "@/services/Sales";
+import { getInventoysByIds, InvertoryInterface } from "@/services/Inventory";
+import { getAllSales, Sales, SalesProduct } from "@/services/Sales";
 import PageContainer from "@/templates/PageContainer";
+import { formatedDate } from "@/utils/formatedDate";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 export default function Home() {
   const [sales, setSales] = useState<Sales[]>([]);
@@ -14,12 +17,14 @@ export default function Home() {
     getAllSales().then((res) => setSales(res.data));
   }, []);
 
-  function formatProduct(lista : InvertoryInterface[]){
-    const ids = lista.map((item)=> item.id).join(",")
-    console.log(ids)
-  
-    const listaFormatada = lista.map(item => <>{`${item.id} - ${item.name}`}<br/></>)
-    return listaFormatada.map((item)=> item)
+  function formatedValue(list: SalesProduct[]) {
+    let value = 0;
+
+    list.map((item) => {
+      value += item.unit_value * item.quantity;
+    });
+
+    return value;
   }
 
   return (
@@ -32,13 +37,20 @@ export default function Home() {
       </Head>
 
       <PageContainer>
-        <TitlePage>Vendas</TitlePage>
-        <Table header={["ID", "Produtos", "Data"]}>
+        <Row>
+          <TitlePage>Vendas</TitlePage>
+        </Row>
+        <Table header={["ID", "Produtos", "Valor Total", "Data"]}>
           {sales.map((item) => (
             <tr className="c-table__row" key={item.id}>
               <td className="c-table__row__data">{item.id}</td>
-              <td className="c-table__row__data">{formatProduct(item.produtos)}</td>
-              <td className="c-table__row__data">{item.date_sold}</td>
+              <ProductRowTable list={item.produtos} />
+              <td className="c-table__row__data">
+                {formatedValue(item.produtos)}
+              </td>
+              <td className="c-table__row__data">
+                {formatedDate(item.date_sold)}
+              </td>
             </tr>
           ))}
         </Table>
@@ -46,3 +58,11 @@ export default function Home() {
     </>
   );
 }
+
+const Row = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`;

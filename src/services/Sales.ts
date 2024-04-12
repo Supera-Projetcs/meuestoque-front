@@ -4,9 +4,15 @@ import { InvertoryInterface } from "./Inventory";
 const baseAxios = axios.create({ baseURL: "http://localhost:8003/" });
 
 
+export interface SalesProduct {
+    id: number
+    id_produto: number
+    unit_value:number
+    quantity:  number
+}
 export interface Sales {
     id: number
-    produtos: InvertoryInterface[],
+    produtos: SalesProduct[],
     date_sold: string
 }
 
